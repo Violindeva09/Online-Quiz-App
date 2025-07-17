@@ -314,6 +314,11 @@
 
     function showReview() {
       reviewBox.innerHTML = `<h3>📘 Answer Review:</h3>`;
+
+      function escapeHTML(str) {
+        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
       quizData.forEach((q, i) => {
         const userAnswer = selectedAnswers[i];
         const isCorrect = userAnswer === q.answer;
@@ -326,13 +331,13 @@
           yourAnswerDisplay = `<span class="skipped-answer">Skipped</span>`;
         } else {
           yourAnswerDisplay = `<span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">
-            ${q.options[userAnswer]}
+            ${escapeHTML(q.options[userAnswer])}
           </span>`;
         }
 
         div.innerHTML = `
           <strong>Q${i + 1}:</strong> ${q.question}<br>
-          ✅ Correct Answer: <span class="correct-answer">${q.options[q.answer]}</span><br>
+          ✅ Correct Answer: <span class="correct-answer">${escapeHTML(q.options[q.answer])}</span><br>
           🧍 Your Answer: ${yourAnswerDisplay}
         `;
         reviewBox.appendChild(div);
@@ -340,13 +345,11 @@
     }
 
     retryBtn.addEventListener("click", () => {
-      // Reset everything
       currentQuestion = 0;
       score = 0;
       skippedCount = 0;
       selectedAnswers = [];
 
-      // Reset UI
       questionText.style.display = "block";
       optionsList.style.display = "block";
       timerBox.style.display = "block";
@@ -360,6 +363,5 @@
 
     loadQuestion();
   </script>
-
 </body>
 </html>
